@@ -1,10 +1,30 @@
 from sklearn.cluster import KMeans
+from sklearn.neighbors import NearestNeighbors
 from itertools import chain
 
 class Inspector:
     base = None
     hand = None
     lift = None
+
+    # These are medians of multiple measurements
+    base_color_rgbs = [
+        [160.0, 70.0, 25.0],
+        [146.0, 54.0, 21.0],
+        [195.0, 197.0, 68.0],
+        [25.0, 69.0, 76.0],
+        [37.0, 117.0, 41.0],
+        [195.0, 260.0, 180.0]
+    ]
+
+    color_names = [
+        'orange',
+        'red',
+        'yellow',
+        'blue',
+        'green',
+        'white'
+    ]
 
     def __init__(self, base, hand, lift):
         self.base = base
@@ -57,10 +77,13 @@ class Inspector:
     def identify_colors(self, face_rgbs):
         measured_rgb_colors = list(chain.from_iterable(chain.from_iterable(face_rgbs)))
 
-        est = KMeans(n_clusters=6)
-        est.fit(measured_rgb_colors)
+        #est = KMeans(n_clusters=6)
+        #est.fit(measured_rgb_colors)
+        #labels = est.labels_
+        #cube_colors = [[[labels[i + 3 * j + 9 * k] for i in range(3)]  for j in range(3)] for k in range(6)]
 
-        labels = est.labels_
+        nbrs = NearestNeighbors(n_neighbors=1).fit(self.base_color_rgbs)
+        labels = nbrs.kneighbors(measured_rgb_colors)[1]
+        cube_colors = [[[labels[i + 3 * j + 9 * k][0] for i in range(3)]  for j in range(3)] for k in range(6)]
 
-        cube_colors = [[[labels[i + 3 * j + 9 * k] for i in range(3)]  for j in range(3)] for k in range(6)]
         return cube_colors
