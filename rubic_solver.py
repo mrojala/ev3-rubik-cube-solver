@@ -1,4 +1,8 @@
 import rpyc
+import json
+from itertools import chain
+import numpy as np
+
 from lift import Lift
 from base import Base
 from hand import Hand
@@ -16,6 +20,29 @@ lift.roll_gently()
 
 
 cube = inspector.measure_cube()
+
+lift.rest()
+
+inspector.identify_colors(cube)
+
+inspector.measure_face()
+
+with open('data/sample_cube_rgb.json') as data_file:
+    data = json.load(data_file)
+
+measured_rgb_colors = list(chain.from_iterable(chain.from_iterable(data['measured'])))
+real_colors = list(chain.from_iterable(chain.from_iterable(data['real'])))
+
+def which_color(c):
+    return filter(lambda i: real_colors[i] == c, range(len(real_colors)))
+
+def filter_measured_colors(c):
+    return [measured_rgb_colors[j] for j in which_color(c)]
+
+def get_color_rgb(c):
+    return list(np.median(np.array(filter_measured_colors(c)), axis=0))
+
+{k: get_color_rgb(v) for k, v in data['colors'].items()}
 
 
 lift.roll()
