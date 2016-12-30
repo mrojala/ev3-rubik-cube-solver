@@ -16,6 +16,9 @@ class Base:
     def turn(self, k=1):
         k %= 4
 
+        if k == 0:
+            return
+
         new_position = self.motor.position
         step = self.right_angle
         new_position -= (new_position + step / 2) % step - step / 2
