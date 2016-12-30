@@ -7,6 +7,7 @@ from lift import Lift
 from base import Base
 from hand import Hand
 from inspector import Inspector
+from mover import Mover
 
 conn = rpyc.classic.connect('ev3dev.local')
 ev3 = conn.modules['ev3dev.ev3']
@@ -15,6 +16,7 @@ base = Base(ev3.LargeMotor('outB'))
 hand = Hand(ev3.MediumMotor('outC'), ev3.ColorSensor('in1'))
 lift = Lift(ev3.LargeMotor('outA'))
 inspector = Inspector(base, hand, lift)
+mover = Mover(base, hand, lift)
 
 lift.roll_gently()
 
