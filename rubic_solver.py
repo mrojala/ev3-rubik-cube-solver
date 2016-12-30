@@ -4,19 +4,36 @@ from base import Base
 from hand import Hand
 from inspector import Inspector
 
-conn = rpyc.classic.connect('ev3dev.local') # host name or IP address of the EV3
-ev3 = conn.modules['ev3dev.ev3']      # import ev3dev.ev3 remotely
+conn = rpyc.classic.connect('ev3dev.local')
+ev3 = conn.modules['ev3dev.ev3']
 
+base = Base(ev3.LargeMotor('outB'))
+hand = Hand(ev3.MediumMotor('outC'), ev3.ColorSensor('in1'))
 lift = Lift(ev3.LargeMotor('outA'))
+inspector = Inspector(base, hand, lift)
+
+lift.roll_gently()
+
+
+cube = inspector.measure_cube()
+
 
 lift.roll()
+
+lift.roll_gently()
 
 lift.pull()
 lift.push()
 
-lift.relax()
+lift.semi_pull()
 
-base = Base(ev3.LargeMotor('outB'))
+lift.rest()
+
+lift.pull()
+
+
+lift.knock()
+
 
 base.turn(1)
 base.turn(3)
@@ -38,6 +55,8 @@ base.semi_turn()
 hand.measure_corner()
 base.semi_turn()
 
-inspector = Inspector(base, hand)
+inspector = Inspector(base, hand, lift)
 
 inspector.measure_face()
+
+cube = inspector.measure_cube()
