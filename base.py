@@ -13,7 +13,7 @@ class Base:
         self.motor.ramp_up_sp = 0
         self.motor.position = 0
 
-    def turn(self, k):
+    def turn(self, k=1):
         k = (k + 4) % 4
 
         new_position = self.motor.position

@@ -53,10 +53,10 @@ class Hand:
         return self.get_rgb()
 
     def measure_center(self):
-        return self.measure_position(240)
+        return self.measure_position(230)
 
     def measure_corner(self):
-        return self.measure_position(215)
+        return self.measure_position(211)
 
     def measure_side(self):
-        return self.measure_position(222)
+        return self.measure_position(215)
