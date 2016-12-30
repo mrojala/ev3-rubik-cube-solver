@@ -17,8 +17,9 @@ class Base:
         k = (k + 4) % 4
 
         new_position = self.motor.position
-        new_position -= (new_position + self.right_angle / 2) % self.right_angle - + self.right_angle / 2
-        new_position += k * self.right_angle
+        step = self.right_angle
+        new_position -= (new_position + step / 2) % step - step / 2
+        new_position += k * step
 
         over_turn = 0.15 * self.right_angle
 
@@ -28,4 +29,14 @@ class Base:
         self.motor.run_to_abs_pos(speed_sp = 300, position_sp=new_position)
         self.motor.wait_while('running', timeout=2000)
 
+        self.motor.stop()
+
+    def semi_turn(self):
+        new_position = self.motor.position
+        step = self.right_angle / 2
+        new_position -= (new_position + step / 2) % step - step / 2
+        new_position += step
+
+        self.motor.run_to_abs_pos(speed_sp = 1000, position_sp=new_position)
+        self.motor.wait_while('running', timeout=2000)
         self.motor.stop()
