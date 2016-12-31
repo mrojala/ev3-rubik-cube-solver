@@ -1,4 +1,4 @@
-from sklearn.cluster import KMeans
+#from sklearn.cluster import KMeans
 from sklearn.neighbors import NearestNeighbors
 from itertools import chain
 
@@ -14,7 +14,8 @@ class Inspector:
         [195.0, 197.0, 68.0],
         [25.0, 69.0, 76.0],
         [37.0, 117.0, 41.0],
-        [195.0, 260.0, 180.0]
+        [195.0, 260.0, 180.0],
+        [94, 139, 98]
     ]
 
     color_names = [
@@ -23,7 +24,8 @@ class Inspector:
         'yellow',
         'blue',
         'green',
-        'white'
+        'white',
+        'white_center'
     ]
 
     def __init__(self, base, hand, lift):
@@ -34,23 +36,27 @@ class Inspector:
     def measure_face(self):
         face_rgbs = [[()] * 3 for i in range(3)]
 
-        self.base.semi_turn()
-        face_rgbs[2][0] = self.hand.measure_corner()
+        # push the cube to left side, roughly middle,
+        # need to adjust measurement position when rotated
+        self.hand.push()
+
+        self.base.semi_turn(5)
+        face_rgbs[2][0] = self.hand.measure_corner(2)
         self.base.semi_turn()
         face_rgbs[1][0] = self.hand.measure_side()
+        self.base.semi_turn(-5)
+        face_rgbs[0][0] = self.hand.measure_corner(3)
         self.base.semi_turn()
-        face_rgbs[0][0] = self.hand.measure_corner()
+        face_rgbs[0][1] = self.hand.measure_side(9)
         self.base.semi_turn()
-        face_rgbs[0][1] = self.hand.measure_side()
+        face_rgbs[0][2] = self.hand.measure_corner(10)
         self.base.semi_turn()
-        face_rgbs[0][2] = self.hand.measure_corner()
+        face_rgbs[1][2] = self.hand.measure_side(9)
         self.base.semi_turn()
-        face_rgbs[1][2] = self.hand.measure_side()
+        face_rgbs[2][2] = self.hand.measure_corner(6)
         self.base.semi_turn()
-        face_rgbs[2][2] = self.hand.measure_corner()
-        self.base.semi_turn()
-        face_rgbs[2][1] = self.hand.measure_side()
-        face_rgbs[1][1] = self.hand.measure_center()
+        face_rgbs[2][1] = self.hand.measure_side(5)
+        face_rgbs[1][1] = self.hand.measure_center(7)
 
         self.hand.rest()
 
@@ -84,6 +90,15 @@ class Inspector:
 
         nbrs = NearestNeighbors(n_neighbors=1).fit(self.base_color_rgbs)
         labels = nbrs.kneighbors(measured_rgb_colors)[1]
-        cube_colors = [[[labels[i + 3 * j + 9 * k][0] for i in range(3)]  for j in range(3)] for k in range(6)]
+
+        # red and orange get mixed easily, use the red channel only for the determination
+        fixed_labels = [
+            5 if labels[i][0] == 6
+            else (
+                  labels[i][0] if labels[i][0] > 1
+                  else (0 if measured_rgb_colors[i][1] >= 60 else 1)
+            ) for i in range(len(labels))
+        ]
+        cube_colors = [[[fixed_labels[i + 3 * j + 9 * k] for i in range(3)]  for j in range(3)] for k in range(6)]
 
         return cube_colors
