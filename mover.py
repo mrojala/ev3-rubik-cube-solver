@@ -20,13 +20,17 @@ class Mover:
         self.hand = hand
         self.lift = lift
 
-    def move(self, movement):
+    def move(self, movements):
         """ Standardized movements, [DFRBLU][2']? """
-        new_bottom_face = movement[0]
-        rotation_count = 1 if len(movement) == 1 else (2 if movement[1] == '2' else 3)
 
-        self.change_bottom_face(new_bottom_face)
-        self.rotate_face_at_bottom(rotation_count)
+        movements = [movements] if type(movements) == 'str' else movements
+
+        for movement in movements:
+            new_bottom_face = movement[0]
+            rotation_count = 1 if len(movement) == 1 else (2 if movement[1] == '2' else 3)
+
+            self.change_bottom_face(new_bottom_face)
+            self.rotate_face_at_bottom(rotation_count)
 
     def roll(self):
         self.lift.roll()
