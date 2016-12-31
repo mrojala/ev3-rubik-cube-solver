@@ -23,7 +23,7 @@ class Lift:
         self.pull_position = self.motor.position
 
         self.semi_push_position = 0.4 * self.pull_position + 0.6 * self.push_position
-        self.semi_pull_position = 0.65 * self.pull_position + 0.35 * self.push_position
+        self.semi_pull_position = 0.7 * self.pull_position + 0.3 * self.push_position
 
         self.state = 'pull'
 
@@ -59,7 +59,7 @@ class Lift:
     def semi_pull(self):
         if self.state == 'push':
             self.motor.stop_action = 'brake'
-            self.motor.run_to_abs_pos(speed_sp=-300, position_sp = self.semi_pull_position)
+            self.motor.run_to_abs_pos(speed_sp=-200, position_sp = self.semi_pull_position)
             self.motor.wait_while('running', timeout=1000)
             self.motor.stop()
             self.state = 'semi_pull'
@@ -76,7 +76,7 @@ class Lift:
     def roll_gently(self):
         self.push()
         self.semi_pull()
-        self.knock()
+        #self.knock()
         self.pull()
 
     def rest(self):

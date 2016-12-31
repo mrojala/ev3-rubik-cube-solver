@@ -67,12 +67,14 @@ class Inspector:
 
         for i in range(1, 5):
             self.lift.roll_gently()
+            self.base.shake()
             faces[i % 4] = self.measure_face()
 
         self.base.turn()
 
         for i in range(4, 6):
             self.lift.roll_gently()
+            self.base.shake()
             faces[i] = self.measure_face()
             self.lift.roll()
 
