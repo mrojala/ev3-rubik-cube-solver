@@ -23,7 +23,7 @@ class Mover:
     def move(self, movements):
         """ Standardized movements, [DFRBLU][2']? """
 
-        movements = [movements] if type(movements) == 'str' else movements
+        movements = [movements] if type(movements) == str else movements
 
         for movement in movements:
             new_bottom_face = movement[0]
@@ -36,15 +36,16 @@ class Mover:
         self.lift.roll()
         self.current_orientation = self.get_roll_neighbor(self.current_orientation)
 
-    def turn(self, k=1):
+    def turn(self, k=1, is_held = False):
         k %= 4
         self.base.turn(k)
-        for i in range(k):
-            self.current_orientation = self.get_turn_neighbor(self.current_orientation)
+        if not is_held:
+            for i in range(k):
+                self.current_orientation = self.get_turn_neighbor(self.current_orientation)
 
     def rotate_face_at_bottom(self, rotation_count=1):
         self.hand.hold()
-        self.turn(rotation_count)
+        self.turn(rotation_count, True)
         self.hand.rest()
 
     def change_bottom_face(self, new_bottom_face):

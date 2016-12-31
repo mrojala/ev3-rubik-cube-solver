@@ -43,3 +43,13 @@ class Base:
         self.motor.run_to_abs_pos(speed_sp = 150, position_sp=new_position)
         self.motor.wait_while('running', timeout=100)
         self.motor.stop()
+
+    def shake(self):
+        over_turn = 0.3 * self.right_angle
+
+        self.motor.run_to_rel_pos(speed_sp = 1000, position_sp=over_turn)
+        self.motor.wait_while('running', timeout=1000)
+
+        self.motor.run_to_rel_pos(speed_sp = 1000, position_sp=-over_turn)
+        self.motor.wait_while('running', timeout=1000)
+        self.motor.stop()

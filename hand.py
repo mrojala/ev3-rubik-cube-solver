@@ -44,10 +44,17 @@ class Hand:
 
     def push(self):
         self.run_to_position(5, -500, 'brake')
-        self.run_to_position(120, 500, 'brake', True)
+        self.motor.wait_while('running', timeout=1000)
+        self.motor.stop()
+
+        self.run_to_position(140, 500, 'brake', True)
+        self.motor.wait_while('running', timeout=1000)
+        self.motor.stop()
 
     def rest(self):
-        self.run_to_position(120, 1000, 'brake')
+        self.run_to_position(140, 1000, 'brake')
+        self.motor.wait_while('running', timeout=500)
+        self.motor.stop()
 
     def get_rgb(self):
         return self.sensor.raw

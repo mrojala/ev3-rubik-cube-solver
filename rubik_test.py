@@ -20,9 +20,11 @@ inspector = Inspector(base, hand, lift)
 mover = Mover(base, hand, lift)
 
 
-(final_coloring, error_count, measurements, colorings) = inspector.get_cube_colors()
+#(final_coloring, error_count, measurements, colorings) = inspector.get_cube_colors()
+#assert error_count == 0
 
-assert error_count == 0
+cube = inspector.measure_cube()
+final_coloring = inspector.identify_colors(cube)
 
 solution_steps = get_solution(final_coloring)
 
@@ -30,7 +32,33 @@ mover.move(solution_steps)
 
 
 
+final_coloring = [[[2, 5, 5], [0, 3, 0], [1, 5, 5]],
+ [[0, 4, 2], [2, 2, 4], [3, 1, 1]],
+ [[0, 2, 3], [0, 4, 0], [2, 4, 1]],
+ [[0, 4, 0], [3, 5, 5], [3, 3, 5]],
+ [[1, 3, 4], [3, 1, 1], [4, 2, 2]],
+ [[3, 5, 4], [1, 0, 1], [5, 2, 4]]]
 
+ ['F',
+ 'U',
+ "D'",
+ 'B2',
+ "R'",
+ 'B',
+ 'D2',
+ "L'",
+ 'U2',
+ 'L',
+ 'U',
+ 'R2',
+ 'F2',
+ 'B2',
+ 'U2',
+ 'B2',
+ 'L2',
+ "D'",
+ 'F2',
+ 'L2']
 
 # let's skip the measurements for a while
 #with open('data/sample_cube_rgb.json') as data_file:
