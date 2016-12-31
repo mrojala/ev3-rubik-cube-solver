@@ -33,7 +33,9 @@ mover.move(solution_steps)
 
 
 
+a = inspector.measure_face()
 
+inspector.identify_colors([a] * 6)
 
 
 

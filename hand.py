@@ -42,6 +42,10 @@ class Hand:
     def hold(self):
         self.run_to_position(0, -1000, 'hold')
 
+    def push(self):
+        self.run_to_position(5, -500, 'brake')
+        self.run_to_position(120, 500, 'brake', True)
+
     def rest(self):
         self.run_to_position(120, 1000, 'brake')
 
@@ -51,12 +55,16 @@ class Hand:
     def measure_position(self, position):
         self.run_to_position(position, 100, 'brake', True)
         return self.get_rgb()
+        #rgbs = []
+        #for adjust in [-5, 0, 5]:
+        #    self.run_to_position(position + adjust, 100, 'brake', True)
+        #    rgbs.append(get_rgb())
 
-    def measure_center(self):
-        return self.measure_position(230)
+    def measure_center(self, adjust=0):
+        return self.measure_position(230 + adjust)
 
-    def measure_corner(self):
-        return self.measure_position(211)
+    def measure_corner(self, adjust=0):
+        return self.measure_position(211 + adjust)
 
-    def measure_side(self):
-        return self.measure_position(215)
+    def measure_side(self, adjust=0):
+        return self.measure_position(215 + adjust)
