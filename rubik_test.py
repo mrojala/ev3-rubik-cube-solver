@@ -19,13 +19,23 @@ lift = Lift(ev3.LargeMotor('outA'))
 inspector = Inspector(base, hand, lift)
 mover = Mover(base, hand, lift)
 
-cube = inspector.measure_cube()
+
+(final_coloring, error_count, measurements, colorings) = inspector.get_cube_colors()
+
+assert error_count == 0
+
+solution_steps = get_solution(final_coloring)
+
+mover.move(solution_steps)
+
+
+
+
 
 # let's skip the measurements for a while
-with open('data/sample_cube_rgb.json') as data_file:
-    data = json.load(data_file)
-
-cube = data['real']
+#with open('data/sample_cube_rgb.json') as data_file:
+#    data = json.load(data_file)
+#cube = data['real']
 
 solution_steps = get_solution(cube)
 
