@@ -8,6 +8,7 @@ from base import Base
 from hand import Hand
 from inspector import Inspector
 from mover import Mover
+from solver import get_solution
 
 conn = rpyc.classic.connect('ev3dev.local')
 ev3 = conn.modules['ev3dev.ev3']
@@ -17,6 +18,27 @@ hand = Hand(ev3.MediumMotor('outC'), ev3.ColorSensor('in1'))
 lift = Lift(ev3.LargeMotor('outA'))
 inspector = Inspector(base, hand, lift)
 mover = Mover(base, hand, lift)
+
+cube = inspector.measure_cube()
+
+# let's skip the measurements for a while
+with open('data/sample_cube_rgb.json') as data_file:
+    data = json.load(data_file)
+
+cube = data['real']
+
+solution_steps = get_solution(cube)
+
+mover.move(solution_steps)
+
+
+
+
+
+
+
+#old tests
+
 
 lift.roll_gently()
 
