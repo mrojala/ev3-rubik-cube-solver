@@ -102,3 +102,25 @@ class Inspector:
         cube_colors = [[[fixed_labels[i + 3 * j + 9 * k] for i in range(3)]  for j in range(3)] for k in range(6)]
 
         return cube_colors
+
+    def get_cube_colors(self):
+        measurements = []
+        colorings = []
+        for i in range(3):
+            measurement = self.measure_cube()
+            measurements.append(measurement)
+            coloring = self.identify_colors(measurement)
+            colorings.append(coloring)
+
+        final_coloring = colorings[0]
+        error_count = 0
+
+        for i in range(3):
+            for j in range(3):
+                if final_coloring[i][j] != colorings[1][i][j] and final_coloring[i][j] != colorings[2][i][j]:
+                    if colorings[1][i][j] != colorings[2][i][j]:
+                        error_count += 1
+                    else:
+                        final_coloring[i][j] = colorings[1][i][j]
+
+        return (final_coloring, error_count, measurements, colorings)
