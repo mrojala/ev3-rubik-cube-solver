@@ -24,13 +24,13 @@ class Base:
         new_position -= (new_position + step / 2) % step - step / 2
         new_position += k * step
 
-        over_turn = 0.15 * self.right_angle
+        over_turn = 0.1 * self.right_angle
 
         self.motor.run_to_abs_pos(speed_sp = 1000, position_sp=new_position + over_turn)
-        self.motor.wait_while('running', timeout=2000)
+        self.motor.wait_while('running', timeout=1000)
 
-        self.motor.run_to_abs_pos(speed_sp = 300, position_sp=new_position)
-        self.motor.wait_while('running', timeout=2000)
+        self.motor.run_to_abs_pos(speed_sp = 500, position_sp=new_position)
+        self.motor.wait_while('running', timeout=1000)
 
         self.motor.stop()
 
@@ -41,5 +41,5 @@ class Base:
         new_position += step
 
         self.motor.run_to_abs_pos(speed_sp = 1000, position_sp=new_position)
-        self.motor.wait_while('running', timeout=2000)
+        self.motor.wait_while('running', timeout=1000)
         self.motor.stop()
