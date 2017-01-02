@@ -9,6 +9,9 @@ from hand import Hand
 from inspector import Inspector
 from mover import Mover
 from solver import get_solution
+from mocks import LiftMock, BaseMock, HandMock
+
+lift, base, hand = LiftMock(), BaseMock(), HandMock()
 
 conn = rpyc.classic.connect('ev3dev.local')
 ev3 = conn.modules['ev3dev.ev3']
@@ -20,15 +23,30 @@ inspector = Inspector(base, hand, lift)
 mover = Mover(base, hand, lift)
 
 
+
 #(final_coloring, error_count, measurements, colorings) = inspector.get_cube_colors()
 #assert error_count == 0
 
 cube = inspector.measure_cube()
 final_coloring = inspector.identify_colors(cube)
 
-solution_steps = get_solution(final_coloring)
+(solution_steps, current_orientation) = get_solution(final_coloring)
 
+mover.reset_orientation(current_orientation)
 mover.move(solution_steps)
+
+
+
+
+base = Base(ev3.LargeMotor('outB'))
+hand = Hand(ev3.MediumMotor('outC'), ev3.ColorSensor('in1'))
+lift = Lift(ev3.LargeMotor('outA'))
+inspector = Inspector(base, hand, lift)
+mover = Mover(base, hand, lift)
+
+mover.reset_orientation(current_orientation)
+mover.move(solution_steps)
+
 
 
 
@@ -38,6 +56,50 @@ final_coloring = [[[2, 5, 5], [0, 3, 0], [1, 5, 5]],
  [[0, 4, 0], [3, 5, 5], [3, 3, 5]],
  [[1, 3, 4], [3, 1, 1], [4, 2, 2]],
  [[3, 5, 4], [1, 0, 1], [5, 2, 4]]]
+
+
+
+final_coloring = [[[4, 4, 0], [5, 3, 0], [2, 3, 1]],
+ [[3, 5, 5], [4, 2, 0], [5, 5, 4]],
+ [[0, 0, 0], [3, 4, 1], [5, 4, 2]],
+ [[5, 3, 2], [2, 5, 0], [1, 4, 1]],
+ [[3, 3, 1], [2, 1, 1], [4, 5, 3]],
+ [[4, 1, 2], [2, 0, 2], [3, 1, 0]]]
+
+
+
+
+final_coloring = [[[4, 1, 1], [5, 2, 5], [2, 2, 3]],
+ [[3, 4, 1], [1, 0, 1], [0, 3, 3]],
+ [[5, 4, 0], [4, 5, 1], [2, 5, 0]],
+ [[2, 4, 0], [2, 1, 3], [3, 0, 1]],
+ [[2, 2, 1], [0, 4, 0], [4, 3, 5]],
+ [[4, 5, 5], [0, 3, 3], [4, 2, 5]]]
+
+
+
+
+
+final_coloring = [[[, , ], [, , ], [, , ]],
+ [[, , ], [, , ], [, , ]],
+ [[, , ], [, , ], [, , ]],
+ [[, , ], [, , ], [, , ]],
+ [[, , ], [, , ], [, , ]],
+ [[, , ], [, , ], [, , 4]]]
+
+
+
+
+mover.move(solution_steps)
+
+ p: F
+ s: U
+ k: R
+ o: B
+ va: L
+ vi: D
+
+
 
  ['F',
  'U',
