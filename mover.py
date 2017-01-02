@@ -1,3 +1,5 @@
+import sys
+
 class Mover:
     base = None
     hand = None
@@ -20,17 +22,26 @@ class Mover:
         self.hand = hand
         self.lift = lift
 
+    def __str__(self):
+        return str(self.current_orientation)
+
+    def reset_orientation(self, current_orientation):
+        self.current_orientation = current_orientation
+
     def move(self, movements):
         """ Standardized movements, [DFRBLU][2']? """
 
         movements = [movements] if type(movements) == str else movements
 
         for movement in movements:
+            sys.stdout.write(str(self) + ', ')
             new_bottom_face = movement[0]
             rotation_count = 1 if len(movement) == 1 else (2 if movement[1] == '2' else 3)
 
             self.change_bottom_face(new_bottom_face)
             self.rotate_face_at_bottom(rotation_count)
+
+        sys.stdout.write(str(self))
 
     def roll(self):
         self.lift.roll()
