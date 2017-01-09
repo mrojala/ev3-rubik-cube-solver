@@ -6,6 +6,7 @@ class Hand:
     def __init__(self, motor, sensor):
         self.motor = motor
         self.sensor = sensor
+        self.sensor.mode = 'RGB-RAW'
 
         self.degree = self.motor.count_per_rot / 360
 
@@ -36,19 +37,17 @@ class Hand:
 
         self.motor.stop_action = stop_action
         self.motor.run_to_abs_pos(speed_sp=speed, position_sp=position * self.degree)
-        self.motor.wait_while('running', timeout=2000)
+        self.motor.wait_while('running', timeout=1000)
         self.motor.stop()
 
     def hold(self):
         self.run_to_position(0, -1000, 'hold')
 
     def push(self):
-        self.run_to_position(5, -500, 'brake')
-        self.motor.wait_while('running', timeout=1000)
-        self.motor.stop()
-
-        self.run_to_position(140, 500, 'brake', True)
-        self.motor.wait_while('running', timeout=1000)
+        self.run_to_position(310, 500, 'brake')
+        self.motor.wait_while('running', timeout=300)
+        self.run_to_position(310, 500, 'brake')
+        self.motor.wait_while('running', timeout=100)
         self.motor.stop()
 
     def rest(self):
@@ -60,7 +59,7 @@ class Hand:
         return self.sensor.raw
 
     def measure_position(self, position):
-        self.run_to_position(position, 100, 'brake', True)
+        self.run_to_position(position, 100, 'brake', False)
         return self.get_rgb()
         #rgbs = []
         #for adjust in [-5, 0, 5]:
@@ -68,10 +67,10 @@ class Hand:
         #    rgbs.append(get_rgb())
 
     def measure_center(self, adjust=0):
-        return self.measure_position(230 + adjust)
+        return self.measure_position(225 + adjust)
 
     def measure_corner(self, adjust=0):
-        return self.measure_position(211 + adjust)
+        return self.measure_position(207 + adjust)
 
     def measure_side(self, adjust=0):
         return self.measure_position(215 + adjust)
