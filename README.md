@@ -4,6 +4,8 @@ This is a hobby project to solve Rubic's cube by using Lego Mindstorms EV3. Both
 
 This solution uses [ev3dev](http://www.ev3dev.org/) that is a full Linux operating system that runs on top of Lego Mindstorms EV3. Code is written in Python by using the Python binding for ev3dev ([1](https://github.com/rhempel/ev3dev-lang-python), [2](https://sites.google.com/site/ev3python/)) that allows controlling motors and sensors easily. The code could be run directly in the EV3 but I've preferred using [RPyC server](http://ev3dev-lang-python.readthedocs.io/en/latest/rpyc.html). See also instructions how to [share internet via bluetooth for EV3](http://www.ev3dev.org/docs/tutorials/connecting-to-the-internet-via-bluetooth/).
 
+See the following youtube video to see the solver in action: https://www.youtube.com/watch?v=muertldQcv0
+
 ![Physical structure of the Rubic's cube solver](https://cloud.githubusercontent.com/assets/10807957/21730845/3c5da95a-d45a-11e6-9396-857b790677ab.png)
 
 ## About the solution
@@ -22,7 +24,7 @@ There is a standard notation how Rubic's cube movements are marked. For example,
 
 ### 3. Measuring the cube's initial state
 
-Python class called *Inspector* uses Hand's color measurement sensor to measure the initial state of the rubic cube. The measurement is currently quite unstable and still under work. Identifying the color is hard and depends on the lighting. Especially detecting red and orange from each other can fail. Also aligning the cube and sensor needs to be very exact. If the measurement fails, the initial state can be input by hand.
+Python class called *Inspector* uses Hand's color measurement sensor to measure the initial state of the rubic cube. The measurement is currently quite unstable and still under work. Identifying the color is hard and depends on the lighting. Especially detecting red and orange from each other can fail sometimes. If the measurement fails, the initial state can be corrected by hand.
 
 ### 4. Finding the solution
 
@@ -30,4 +32,4 @@ Given the initial state, the solution uses currently [Ruwix online Rubic's cube 
 
 ### 5. Joining the parts
 
-There is not a final clean code for this, but the rubic_test.py contains current testing code that has been used to run different parts. It first connects the ev3 by RPyC, initializes the physical control classes, measures initial states, finds the solution path and makes the movements. That's it.
+The file solve_rubik_cube.py combines all of thes parts. It first connects the ev3 by RPyC, initializes the physical control classes, measures initial states, finds the solution path and makes the movements. That's it.
