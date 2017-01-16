@@ -24,7 +24,6 @@ def get_solution(cube):
     color_map = [3, 5, 1, 4, 2, 6]
     color_directions = ['F', 'B', 'U', 'R', 'L', 'D']
 
-
     cube_ruwix_string = ''.join(['0'] + list(map(lambda x: str(color_map[x]), cube_listed)))
     url = 'https://rubiks-cube-solver.com/solution.php?cube=' + cube_ruwix_string
 
@@ -32,7 +31,7 @@ def get_solution(cube):
     browser = webdriver.Chrome(executable_path = path_to_chromedriver)
     browser.get(url)
 
-    time.sleep(20)
+    time.sleep(10)
 
     solution_steps = browser.find_element_by_xpath('//*[@id="segedvaltozo"]').text
     solution_steps = solution_steps[13:].split(' ')
