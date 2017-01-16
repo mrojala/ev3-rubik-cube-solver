@@ -14,16 +14,18 @@ conn = rpyc.classic.connect('ev3dev.local')
 ev3 = conn.modules['ev3dev.ev3']
 
 base = Base(ev3.LargeMotor('outB'))
-lift = Lift(ev3.LargeMotor('outA'))
 hand = Hand(ev3.MediumMotor('outC'), ev3.ColorSensor('in1'))
+lift = Lift(ev3.LargeMotor('outA'))
 inspector = Inspector(base, hand, lift)
 mover = Mover(base, hand, lift)
 
 
 a = inspector.measure_face()
 
+inspector.identify_face_colors(a)
+
 cube = inspector.measure_cube()
-final_coloring = inspector.identify_colors(cube)
+final_coloring = inspector.identify_cube_colors(cube)
 
 (solution_steps, current_orientation) = get_solution(final_coloring)
 

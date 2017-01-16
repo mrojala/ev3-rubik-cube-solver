@@ -1,19 +1,10 @@
 from colorsys import rgb_to_hls
+from colors import Colors
 
 class Inspector:
     base = None
     hand = None
     lift = None
-
-    color_names = [
-        'orange',
-        'red',
-        'yellow',
-        'blue',
-        'green',
-        'white',
-        'white_center'
-    ]
 
     def __init__(self, base, hand, lift):
         self.base = base
@@ -27,8 +18,9 @@ class Inspector:
 
         for i in range(4):
             self.hand.push()
+            self.base.semi_turn(7, 0)
             face_rgbs[order[2 * i][0]][order[2 * i][1]] = self.hand.measure_side()
-            self.base.semi_turn(5)
+            self.base.semi_turn(10)
             face_rgbs[order[2 * i + 1][0]][order[2 * i + 1][1]] = self.hand.measure_corner()
             self.base.semi_turn()
 
@@ -62,16 +54,22 @@ class Inspector:
         hls = rgb_to_hls(*rgb)
 
         if hls[2] > -0.3:
-            return 5
+            return Colors.WHITE
 
         if hls[2] < -0.6:
-            return 1 if hls[0] < 0.05 else 0
+            # the sensor give almost no difference between red and orange
+            # green channel seems to be the most reliable
+            return Colors.RED if rgb[1] < 60 else Colors.ORANGE
 
-        if hls[0] < 0.1:
-            return 2
+        if hls[0] < 0.15:
+            return Colors.YELLOW
 
-        return 3 if hls[0] > 0.45 else 4
+        return Colors.BLUE if hls[0] > 0.45 else Colors.GREEN
 
-    def identify_colors(self, face_rgbs):
-        cube_colors = [[[self.get_color(face_rgbs[k][j][i]) for i in range(3)]  for j in range(3)] for k in range(6)]
+    def identify_face_colors(self, face_rgbs):
+        face_colors = [[self.get_color(face_rgbs[j][i]) for i in range(3)] for j in range(3)]
+        return face_colors
+
+    def identify_cube_colors(self, cube_rgbs):
+        cube_colors = [self.identify_face_colors(cube_rgbs[k]) for k in range(6)]
         return cube_colors

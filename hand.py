@@ -61,16 +61,12 @@ class Hand:
     def measure_position(self, position):
         self.run_to_position(position, 100, 'brake', False)
         return self.get_rgb()
-        #rgbs = []
-        #for adjust in [-5, 0, 5]:
-        #    self.run_to_position(position + adjust, 100, 'brake', True)
-        #    rgbs.append(get_rgb())
 
     def measure_center(self, adjust=0):
-        return self.measure_position(225 + adjust)
+        return self.measure_position(221 + adjust)
 
     def measure_corner(self, adjust=0):
-        return self.measure_position(207 + adjust)
+        return self.measure_position(203 + adjust)
 
     def measure_side(self, adjust=0):
-        return self.measure_position(215 + adjust)
+        return self.measure_position(212 + adjust)

@@ -34,11 +34,11 @@ class Base:
 
         self.motor.stop()
 
-    def semi_turn(self, adjust=0):
+    def semi_turn(self, adjust=0, k=1):
         new_position = self.motor.position
         step = self.right_angle / 2
         new_position -= (new_position + step / 2) % step - step / 2
-        new_position += step + adjust
+        new_position += k * step + adjust
 
         self.motor.run_to_abs_pos(speed_sp = 150, position_sp=new_position)
         self.motor.wait_while('running', timeout=100)
