@@ -59,7 +59,7 @@ class Inspector:
         if hls[2] < -0.6:
             # the sensor give almost no difference between red and orange
             # green channel seems to be the most reliable
-            return Colors.RED if rgb[1] < 60 else Colors.ORANGE
+            return Colors.RED if rgb[1] < 56 else Colors.ORANGE
 
         if hls[0] < 0.15:
             return Colors.YELLOW

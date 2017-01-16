@@ -41,7 +41,7 @@ class Hand:
         self.motor.stop()
 
     def hold(self):
-        self.run_to_position(0, -1000, 'hold')
+        self.run_to_position(-5, -1000, 'hold')
 
     def push(self):
         self.run_to_position(310, 500, 'brake')
